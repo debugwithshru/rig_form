@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const successMessage = document.getElementById('successMessage');
 
     // Webhook URL
-    const WEBHOOK_URL = 'https://joseph-unkidnapped-derangedly.ngrok-free.dev/webhook-test/ac4533e7-73c5-4470-a80e-a138bd3f487a';
+    const WEBHOOK_URL = 'https://joseph-unkidnapped-derangedly.ngrok-free.dev/webhook/ac4533e7-73c5-4470-a80e-a138bd3f487a';
 
     // Handle form submission
     form.addEventListener('submit', async (e) => {
@@ -97,4 +97,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 
