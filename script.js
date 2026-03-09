@@ -7,24 +7,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const successMessage = document.getElementById('successMessage');
 
     // Webhook URL
-    const WEBHOOK_URL = 'https://joseph-unkidnapped-derangedly.ngrok-free.dev/webhook-test/ac4533e7-73c5-4470-a80e-a138bd3f487a';
+    const WEBHOOK_URL = 'https://joseph-unkidnapped-derangedly.ngrok-free.dev/webhook/ac4533e7-73c5-4470-a80e-a138bd3f487a';
 
     // Handle form submission
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        // Get Telegram User Info
-        let telegramUserId = null;
-        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe.user) {
-            telegramUserId = window.Telegram.WebApp.initDataUnsafe.user.id;
+        // 1. Extract Telegram User ID safely from the WebApp environment
+        let telegramChatId = null;
+        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
+            telegramChatId = window.Telegram.WebApp.initDataUnsafe.user.id;
         }
 
-        // Gather Data 
+        // 2. Gather Data with the new chat_id field
         const payload = {
             rig: rigSelect.value,
             footage_range: footageSelect.value,
-            telegram_user_id: telegramUserId,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            chat_id: telegramChatId // This allows n8n to send the PDF back to the specific user
         };
 
         // Basic validation
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.style.opacity = '0.7';
         submitBtn.disabled = true;
 
-        console.log("Prepared Payload:", JSON.stringify(payload));
+        console.log("Prepared Payload with Chat ID:", JSON.stringify(payload));
 
         try {
             if (WEBHOOK_URL) {
@@ -66,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Success state
             form.reset();
-
             successMessage.classList.remove('hidden');
 
             // Hide success message after 4 seconds
@@ -74,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 successMessage.classList.add('hidden');
             }, 4000);
 
-            // Optional: Telegram integration feedback
+            // Optional: Telegram Haptic Feedback
             if (window.Telegram && window.Telegram.WebApp) {
                 try {
                     window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
