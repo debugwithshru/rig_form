@@ -7,16 +7,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const successMessage = document.getElementById('successMessage');
 
     // Webhook URL
-    const WEBHOOK_URL = 'https://joseph-unkidnapped-derangedly.ngrok-free.dev/webhook/ac4533e7-73c5-4470-a80e-a138bd3f487a';
+    const WEBHOOK_URL = 'https://joseph-unkidnapped-derangedly.ngrok-free.dev/webhook-test/ac4533e7-73c5-4470-a80e-a138bd3f487a';
 
     // Handle form submission
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
+        // Get Telegram User Info
+        let telegramUserId = null;
+        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe.user) {
+            telegramUserId = window.Telegram.WebApp.initDataUnsafe.user.id;
+        }
+
         // Gather Data 
         const payload = {
             rig: rigSelect.value,
             footage_range: footageSelect.value,
+            telegram_user_id: telegramUserId,
             timestamp: new Date().toISOString()
         };
 
@@ -91,4 +98,3 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
-
